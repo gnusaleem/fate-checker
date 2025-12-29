@@ -1,6 +1,6 @@
 # fate-checker
 
-[![C/C++ CI](https://github.com/gnusaleem/fate-checker/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/gnusaleem/fate-checker/actions/workflows/c-cpp.yml)
+[![C CI/CD](https://github.com/gnusaleem/fate-checker/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/gnusaleem/fate-checker/actions/workflows/c-cpp.yml)
 
 ## A Simple Program to check flames of two persons
 
