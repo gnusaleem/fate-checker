@@ -1,33 +1,46 @@
-name: C/C++ CI
+name: Flames CI
 
 on:
   push:
-    branches: [ "devel" ] # Triggers when you push to devel
+    branches: [ "master", "devel" ]
   pull_request:
-    branches: [ "master" ] # Triggers when you open the PR to master
+    branches: [ "master" ]
+  # This makes the CI run every 7 days automatically (Mondays at midnight)
+  schedule:
+    - cron: '0 0 * * 1' 
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Compile Code
+
+    - name: make
       run: make
 
     - name: Run Logic Test
-      # We pipe names into the program to simulate user input
-      # This ensures the 'pos = (pos + count - 1) % size' logic doesn't crash
-      run: echo "qualcomm intel" | ./flames 
+      run: echo "saleem newbie" | ./flames 
 
-    - name: Create Pull Request
-      # This only runs if 'Run Logic Test' succeeded
-      if: github.event_name == 'push' && github.ref == 'refs/heads/devel'
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        gh pr create \
-          --title "Devel Update: Ready for Review" \
-          --body "CI passed on devel branch. Logic is verified. Ready for manual merge." \
-          --base master \
-          --head devel || echo "PR already exists"
+    - name: Upload FLAMES Binary
+      uses: actions/upload-artifact@v4
+      with:
+        name: flames-binary
+        path: flames
+        # This keeps the file for exactly 7 days
+        retention-days: 7 
+
+  open-pr:
+    needs: build
+    if: github.ref == 'refs/heads/devel' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --title "Auto-PR: Devel to Master" \
+            --body "CI passed. Binary is available in artifacts for 7 days." \
+            --base master \
+            --head devel || echo "PR already exists"
