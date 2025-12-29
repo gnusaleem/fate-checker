@@ -8,10 +8,16 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: make
+
+    - name: Compile with Make
       run: make
+
+    - name: Upload FLAMES Binary
+      uses: actions/upload-artifact@v4
+      with:
+        name: flames-executable
+        path: flames
