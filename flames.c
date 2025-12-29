@@ -33,12 +33,12 @@ void check_flames(char *name1, char *name2) {
 			count++;
 	}
 
-	printf("count = %d\n", count);
+	//printf("count = %d\n", count);
 
 	if (count > 0) {
 		while (size > 0) {
 			pos = (pos + count - 1) % size;
-			printf("pos = %d, count = %d\n", pos, count);\
+			//printf("pos = %d, count = %d\n", pos, count);
 			for (k = pos; k < size - 1; k++) {
 				flames[k] = flames[k+1];
 			}
@@ -47,22 +47,22 @@ void check_flames(char *name1, char *name2) {
 
 		switch(flames[0]) {
 		case 'F':
-			printf("RelationShip Status = FRIENDS\n");
+			printf("RelationShip Status: FRIENDS\n");
 			break;
 		case 'L':
-			printf("RelationShip Status = LOVERS\n");
+			printf("RelationShip Status: LOVERS\n");
 			break;
 		case 'A':
-			printf("RelationShip Status = AFFECTION\n");
+			printf("RelationShip Status: AFFECTION\n");
 			break;
 		case 'M':
-			printf("RelationShip Status = MARRIAGE\n");
+			printf("RelationShip Status: MARRIAGE\n");
 			break;
 		case 'E':
-			printf("RelationShip Status = ENEMIES\n");
+			printf("RelationShip Status: ENEMIES\n");
 			break;
 		case 'S':
-			printf("RelationShip Status = SIBLINGS\n");
+			printf("RelationShip Status: SIBLINGS\n");
 			break;
 		default:
 			printf("Invalid case\n");
@@ -74,7 +74,13 @@ void check_flames(char *name1, char *name2) {
 }
 
 int main(void) {
-	char name1[100], name2[100];
+	char *name1, *name2;
+	int len1 = strlen(name1);
+	int len2 = strlen(name2);
+
+	name1= (char *)calloc(sizeof(char), len1);
+	name2= (char *)calloc(sizeof(char), len2);
+
 	printf("************ FLAMES************\n");
 	printf("First person name: ");
 	scanf("%s", name1);
@@ -82,6 +88,9 @@ int main(void) {
 	scanf("%s", name2);
 
 	check_flames(name1, name2);
+
+	free(name1);
+	free(name2);
 
 	return 0;
 	
