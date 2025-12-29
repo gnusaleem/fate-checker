@@ -18,3 +18,13 @@ size = 6
 
 0 = (0 + 9 - 1) % 6 = 2
 ```
+
+## Usage
+```c
+./flames
+
+************ FLAMES************
+First person name: X
+Second person name: Y
+RelationShip Status: ? // Displays based on the names
+```
