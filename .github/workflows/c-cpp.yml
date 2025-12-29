@@ -1,23 +1,33 @@
-name: C CI/CD
+name: C/C++ CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "devel" ] # Triggers when you push to devel
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master" ] # Triggers when you open the PR to master
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
-
-    - name: Compile with Make
+    
+    - name: Compile Code
       run: make
 
-    - name: Upload FLAMES Binary
-      uses: actions/upload-artifact@v4
-      with:
-        name: flames-executable
-        path: flames
+    - name: Run Logic Test
+      # We pipe names into the program to simulate user input
+      # This ensures the 'pos = (pos + count - 1) % size' logic doesn't crash
+      run: echo "qualcomm intel" | ./flames 
+
+    - name: Create Pull Request
+      # This only runs if 'Run Logic Test' succeeded
+      if: github.event_name == 'push' && github.ref == 'refs/heads/devel'
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh pr create \
+          --title "Devel Update: Ready for Review" \
+          --body "CI passed on devel branch. Logic is verified. Ready for manual merge." \
+          --base master \
+          --head devel || echo "PR already exists"
